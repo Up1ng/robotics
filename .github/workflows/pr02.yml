@@ -1,0 +1,39 @@
+name: PR02 package and evidence
+
+on:
+  push:
+    branches: [pr02]
+
+jobs:
+  check-pr02:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify pinned course kit
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' \
+            '5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8' \
+            '.github/ci/course-kit-v1-w02.tar.gz' | sha256sum -c -
+          mkdir -p .course-kit
+          tar -xzf .github/ci/course-kit-v1-w02.tar.gz -C .course-kit
+          test "$(cat .course-kit/v1/VERSION)" = v1-w02
+      - name: Build package and check evidence in ROS Docker image
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/workspace" -w /workspace \
+            osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8 \
+            bash -lc '
+              source /opt/ros/jazzy/setup.bash
+              set -euo pipefail
+              python3 -m py_compile src/turtle_bringup/launch/sim.launch.py
+              colcon build --symlink-install --packages-select turtle_bringup
+              set +u
+              source install/setup.bash
+              set -u
+              test -f "$(ros2 pkg prefix turtle_bringup)/share/turtle_bringup/launch/sim.launch.py"
+              python3 .course-kit/v1/tools/check_practice.py PR02 --submission .
+            '
