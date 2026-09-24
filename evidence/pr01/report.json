@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR01",
+  "commit": "21bedbb3ce2325ebad718052c66b46a6fba1de13",
+  "course_kit": {
+    "version": "v1-w02",
+    "archive_sha256": "5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8"
+  },
+  "commands": [
+    "source /opt/ros/jazzy/setup.bash; export ROS_DOMAIN_ID=16",
+    "ros2 run turtlesim turtlesim_node",
+    "ros2 run turtlesim turtle_teleop_key",
+    "ros2 doctor --report > evidence/pr01/doctor.txt 2>&1",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 topic list -t",
+    "ros2 node info --no-daemon --spin-time 2 /turtlesim",
+    "ros2 topic type /turtle1/pose",
+    "ros2 topic echo /turtle1/pose --once",
+    "timeout 12s ros2 topic hz /turtle1/pose",
+    "export ROS_DOMAIN_ID=17; ros2 run turtlesim turtle_teleop_key",
+    "ROS_DOMAIN_ID=17 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=17 timeout 5s ros2 topic echo /turtle1/pose turtlesim/msg/Pose --once",
+    "export ROS_DOMAIN_ID=16; ros2 run turtlesim turtle_teleop_key",
+    "ROS_DOMAIN_ID=16 ros2 node list --no-daemon --spin-time 2",
+    "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim/msg/Pose --once"
+  ],
+  "tests": [
+    {
+      "name": "Граф: обнаружены /turtlesim и /teleop_turtle, топики и типы сверены через CLI",
+      "status": "passed"
+    },
+    {
+      "name": "Частота /turtle1/pose: 62.503 Гц за 12 секунд, 631 сообщение в последнем окне",
+      "status": "passed"
+    },
+    {
+      "name": "Разрыв: в домене 17 нет /turtlesim, pose не получена за 5 секунд, exit=124",
+      "status": "passed"
+    },
+    {
+      "name": "Восстановление: в домене 16 обе ноды видны, pose получена, exit=0",
+      "status": "passed"
+    },
+    {
+      "name": "SHA-256 всех файлов course-kit по MANIFEST.sha256",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "Симулятор оставлен в ROS_DOMAIN_ID=16; teleop перезапущен в 17. В 17 виден только /teleop_turtle; timeout 5s ros2 topic echo /turtle1/pose turtlesim/msg/Pose --once завершился с exit=124.",
+    "root_cause": "Разные ROS_DOMAIN_ID разделяют обнаружение участников DDS. Teleop в домене 17 не видит симулятор в 16 и его команды /turtle1/cmd_vel не доставляются. Уже работающий процесс не меняет домен после изменения переменной окружения.",
+    "proof_after": "Teleop перезапущен с ROS_DOMAIN_ID=16. ros2 node list --no-daemon --spin-time 2 показывает /teleop_turtle и /turtlesim; та же проверка pose получила сообщение с x=9.670364379882812 и exit=0."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 2,
+    "self_study_hours": 2
+  },
+  "ai_used": true
+}

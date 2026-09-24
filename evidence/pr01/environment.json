@@ -1,0 +1,21 @@
+{
+  "launch_mode": "docker",
+  "installation": "osrf/ros:jazzy-desktop-full",
+  "os": {
+    "name": "Ubuntu",
+    "version": "24.04.4 LTS"
+  },
+  "ros": {
+    "distribution": "jazzy",
+    "rmw_implementation": "rmw_fastrtps_cpp"
+  },
+  "gazebo": {
+    "distribution": "Harmonic",
+    "gz_sim_version": "8.11.0"
+  },
+  "domains": {
+    "working": 16,
+    "isolated": 17
+  },
+  "docker_image_digest": "sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8"
+}
