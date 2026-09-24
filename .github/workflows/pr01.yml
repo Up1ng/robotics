@@ -1,0 +1,28 @@
+name: PR01 evidence
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-pr01:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify pinned course kit
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' \
+            '5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8' \
+            '.github/ci/course-kit-v1-w02.tar.gz' | sha256sum -c -
+          mkdir -p .course-kit
+          tar -xzf .github/ci/course-kit-v1-w02.tar.gz -C .course-kit
+          test -f .course-kit/v1/tools/check_practice.py
+          test "$(cat .course-kit/v1/VERSION)" = v1-w02
+      - name: Check evidence
+        run: |
+          set -euo pipefail
+          python3 -m json.tool evidence/pr01/environment.json > /dev/null
+          python3 .course-kit/v1/tools/check_practice.py PR01 --submission .
