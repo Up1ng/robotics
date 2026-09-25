@@ -1,0 +1,13 @@
+[INFO] [launch]: All log files can be found below /root/.ros/log/2026-09-24-19-04-26-813100-host-redacted-123
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [turtlesim_node-1]: process started with pid [126]
+[turtlesim_node-1] QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
+[turtlesim_node-1] [INFO] [1790276667.043739160] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1790276667.054813358] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[turtlesim_node-1] MESA: error: Failed to query drm device.
+[turtlesim_node-1] glx: failed to create dri3 screen
+[turtlesim_node-1] failed to load driver: iris
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[turtlesim_node-1] [INFO] [1790276868.663775582] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 126]
