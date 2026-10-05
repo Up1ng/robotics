@@ -1,0 +1,40 @@
+name: PR03 node and evidence
+
+on:
+  push:
+    branches: [pr03]
+
+jobs:
+  check-pr03:
+    runs-on: ubuntu-latest
+    env:
+      COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w05-bca214e3de6f.tar.gz
+      COURSE_KIT_SHA256: bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify pinned course kit
+        run: |
+          set -euo pipefail
+          curl -fsSLo /tmp/course-kit.tar.gz "$COURSE_KIT_URL"
+          printf '%s  %s\n' "$COURSE_KIT_SHA256" /tmp/course-kit.tar.gz | sha256sum -c -
+          mkdir -p .course-kit
+          tar -xzf /tmp/course-kit.tar.gz -C .course-kit
+          test "$(cat .course-kit/v1/VERSION)" = v1-w05
+      - name: Build, test and check evidence in ROS Docker image
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/workspace" -w /workspace \
+            osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8 \
+            bash -lc '
+              source /opt/ros/jazzy/setup.bash
+              set -e
+              colcon build --symlink-install
+              source install/setup.bash
+              python3 -m pytest src/patrol/test
+              colcon test --event-handlers console_direct+
+              colcon test-result --verbose
+              python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
+            '

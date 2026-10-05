@@ -1,61 +1,97 @@
-# ПР02 — пакет и запуск turtlesim
+# ПР03 — первая нода: поза и команда
 
-Пакет `turtle_bringup` создан командой `ros2 pkg create --build-type ament_python --license Apache-2.0 turtle_bringup --dependencies launch launch_ros turtlesim`. В нём нет собственной ноды: `sim.launch.py` запускает установленную `turtlesim_node`. Пакет и launch-файл проверены в Docker с ROS 2 Jazzy.
+Продолжение ПР02: пакет `turtle_bringup` сохранён; новый пакет `patrol`
+использует ROS 2 Jazzy, `rclpy`, `geometry_msgs` и `turtlesim/msg/Pose`.
+Подписка хранит последнюю позу, таймер каждые 0,1 с публикует Twist.
+До первой позы команда нулевая, после — `linear.x=0.5`, `angular.z=0.3`.
+Чистая функция `command_for_pose` проверяется без запуска ROS-графа.
 
-## Среда
+## Docker
 
-- Образ: `osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8`.
-- Рабочий каталог репозитория монтируется в `/workspace`; `src/` и `evidence/` остаются на хосте.
-- Для опыта использован `ROS_DOMAIN_ID=26`; в аудитории подставьте свой домен.
-
-Запуск с графическим окном на Linux из корня репозитория:
+Проверенный образ:
+`osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8`.
+Запускать из корня репозитория, с работающим X11-дисплеем:
 
 ```bash
 xhost +si:localuser:root
-sudo docker run -d --rm --name nsu-pr02 --network host --ipc host \
-  -e DISPLAY="$DISPLAY" -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v "$PWD":/workspace -w /workspace \
-  osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8 \
-  sleep infinity
-sudo docker exec -it nsu-pr02 bash
+sudo docker run --rm -it --name robotics-pr03 \
+  --network host --ipc host \
+  -e DISPLAY="$DISPLAY" -e ROS_DOMAIN_ID=36 -e QT_X11_NO_MITSHM=1 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v "$PWD:/workspace" -w /workspace \
+  osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8 bash
 ```
 
-В терминале контейнера:
+В контейнере:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-export ROS_DOMAIN_ID=26
-cd /workspace
-colcon build --symlink-install --packages-select turtle_bringup
+colcon build --symlink-install
 source install/setup.bash
-ros2 pkg prefix turtle_bringup
-ls "$(ros2 pkg prefix turtle_bringup)/share/turtle_bringup/launch"
+python3 -m pytest src/patrol/test
+colcon test --event-handlers console_direct+
+colcon test-result --verbose
+```
+
+В каждой дополнительной оболочке подключить оба `setup.bash`; домен должен
+совпадать. Для дополнительного терминала: `sudo docker exec -it robotics-pr03 bash`.
+
+Терминал 1:
+
+```bash
 ros2 launch turtle_bringup sim.launch.py
 ```
 
-Откройте ещё один терминал того же контейнера, подключите `/opt/ros/jazzy/setup.bash` и `install/setup.bash`, установите тот же `ROS_DOMAIN_ID`. Проверьте граф и типы:
+Терминал 2 — дефект:
 
 ```bash
-ros2 node list --no-daemon --spin-time 2
-ros2 interface show geometry_msgs/msg/Twist
+ros2 run patrol patrol
+```
+
+Поза поступает, но относительное `cmd_vel` становится `/cmd_vel`, а turtlesim
+подписан на `/turtle1/cmd_vel`. Остановить patrol через Ctrl+C, затем исправить:
+
+```bash
+ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel
+```
+
+Терминал 3:
+
+```bash
+ros2 node info /patrol
 ros2 topic type /turtle1/pose
-ros2 topic echo /turtle1/pose --once
+ros2 topic info /turtle1/cmd_vel --verbose
+ros2 topic hz /turtle1/cmd_vel --window 100
 ```
 
-Для движения отправьте команду:
+Измерять 10 секунд. После Ctrl+C у patrol дождаться нулевых скоростей
+в `/turtle1/pose`: turtlesim останавливает черепаху по своему таймауту команд.
+Затем остановить launch. После завершения Docker отозвать X11-доступ:
+`xhost -si:localuser:root`.
+
+## Воспроизведение опыта и проверка сдачи
+
+`python3 scripts/pr03_demo.py` внутри контейнера с подключённым окружением
+сам запускает и останавливает свои процессы. Перед повтором остановить другие
+экземпляры turtlesim/patrol в домене 36. Скрипт проверяет нулевые команды без
+позы, 10 секунд дефекта, 10 секунд после remap, частоту и остановку;
+перезаписывает соответствующие логи в `evidence/pr03/`.
+
+Зафиксированный course-kit: `v1-w05`, SHA-256
+`bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197`.
 
 ```bash
-ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist \
-  '{linear: {x: 1.0}, angular: {z: 0.5}}'
-ros2 topic echo /turtle1/pose --once
+mkdir -p .course-kit
+curl -fsSLo /tmp/pr03-kit.tar.gz \
+  https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w05-bca214e3de6f.tar.gz
+printf '%s  %s\n' \
+  bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197 \
+  /tmp/pr03-kit.tar.gz | sha256sum -c -
+tar -xzf /tmp/pr03-kit.tar.gz -C .course-kit
+python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
 ```
 
-Тот же `Twist` в `/cmd_vel` не двигает черепаху: у этого топика есть издатель, но нет подписчика. У `/turtle1/cmd_vel` есть подписчик `/turtlesim`. Для воспроизведения используйте непрерывную публикацию с `--wait-matching-subscriptions 0`, сравните `ros2 topic info /cmd_vel --verbose` и `ros2 topic info /turtle1/cmd_vel --verbose`, затем остановите издатель и повторите команду с правильным именем. Изменяйте только имя топика. Выводы и значения позы сохранены в [evidence/pr02/commands.md](evidence/pr02/commands.md) и сырых файлах рядом с ним.
-
-Остановите launch через `Ctrl+C`: нода `/turtlesim` должна исчезнуть из графа. Затем на хосте выполните `sudo docker stop nsu-pr02` и `xhost -si:localuser:root`.
-
-## Проверка сдачи
-
-Архив course-kit `v1-w02` закреплён в `.github/ci/course-kit-v1-w02.tar.gz` (SHA-256 `5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8`). Он предоставлен курсом «Робототехника» НГУ, источник — `https://ros.lms.ci.nsu.ru/`; включён без изменений. Условия использования находятся в `v1/LICENSE.md` внутри архива.
-
-CI проверяет архив, собирает пакет в том же Docker-образе, находит установленный `sim.launch.py` и запускает checker ПР02. Графический опыт выполнен локально и записан в evidence. Коммит реализации предшествует отдельному коммиту evidence; полный SHA реализации указан в `evidence/pr02/report.json`.
+Результаты и объяснения — в `evidence/pr03/demo.md`; CI —
+`.github/workflows/pr03.yml`. Отчёт ссылается на коммит реализации,
+а сдаётся последующий коммит с evidence. Необязательный маршрут мышью не входит
+в эту работу.
