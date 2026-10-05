@@ -1,0 +1,33 @@
+Starting >>> patrol
+Starting >>> turtle_bringup
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+cachedir: /home/uping/project/nsu/robotics-pr03/build/patrol/.pytest_cache
+rootdir: /home/uping/project/nsu/robotics-pr03/src/patrol
+plugins: ament-pep257-0.17.5, ament-lint-0.17.5, launch-testing-3.4.11, ament-copyright-0.17.5, launch-testing-ros-0.26.12, ament-xmllint-0.17.5, ament-flake8-0.17.5, colcon-core-0.21.1
+collected 6 items
+
+test/test_control.py ...                                                 [ 50%]
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+cachedir: /home/uping/project/nsu/robotics-pr03/build/turtle_bringup/.pytest_cache
+rootdir: /home/uping/project/nsu/robotics-pr03/src/turtle_bringup
+plugins: ament-pep257-0.17.5, ament-lint-0.17.5, launch-testing-3.4.11, ament-copyright-0.17.5, launch-testing-ros-0.26.12, ament-xmllint-0.17.5, ament-flake8-0.17.5, colcon-core-0.21.1
+collected 3 items
+
+test/test_copyright.py s                                                 [ 33%]
+test/test_flake8.py .                                                    [ 66%]
+test/test_copyright.py .                                                 [ 66%]
+test/test_pep257.py .                                                    [100%]
+
+- generated xml file: /home/uping/project/nsu/robotics-pr03/build/turtle_bringup/pytest.xml -
+========================= 2 passed, 1 skipped in 0.35s =========================
+Finished <<< turtle_bringup [1.55s]
+test/test_flake8.py .                                                    [ 83%]
+test/test_pep257.py .                                                    [100%]
+
+- generated xml file: /home/uping/project/nsu/robotics-pr03/build/patrol/pytest.xml -
+============================== 6 passed in 0.91s ===============================
+Finished <<< patrol [1.80s]
+
+Summary: 2 packages finished [2.08s]

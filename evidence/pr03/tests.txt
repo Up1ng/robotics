@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /home/uping/project/nsu/robotics-pr03/src/patrol
+plugins: ament-pep257-0.17.5, ament-lint-0.17.5, launch-testing-3.4.11, ament-copyright-0.17.5, launch-testing-ros-0.26.12, ament-xmllint-0.17.5, ament-flake8-0.17.5, colcon-core-0.21.1
+collected 6 items
+
+src/patrol/test/test_control.py ...                                      [ 50%]
+src/patrol/test/test_copyright.py .                                      [ 66%]
+src/patrol/test/test_flake8.py .                                         [ 83%]
+src/patrol/test/test_pep257.py .                                         [100%]
+
+============================== 6 passed in 1.12s ===============================

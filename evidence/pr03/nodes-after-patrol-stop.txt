@@ -1,0 +1,5 @@
+$ ros2 node list
+/pr03_probe
+/turtlesim
+
+EXIT=0

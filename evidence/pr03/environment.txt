@@ -1,0 +1,26 @@
+Mon Oct  5 15:43:42 UTC 2026
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.4 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+jazzy
+36
+rmw_fastrtps_cpp
+dpkg-query: no packages found matching gz-sim8
+ros-jazzy-rclpy	7.1.11-1noble.20260615.133206
+ros-jazzy-turtlesim	1.8.4-1noble.20260615.145700
+v1-w05
+3126cc7c1a0e23f2e0a60cae2dd0ab88f79a48ff88c1758ddc3c3faa9aed94f4  /opt/ros/jazzy/share/turtlesim/package.xml
+8.11.0
+ros-jazzy-gz-sim-vendor	0.0.10-1noble.20260604.111001
+ros-jazzy-ros-gz-sim	1.0.22-1noble.20260615.173223
+ros-jazzy-ros-gz-sim-demos	1.0.22-1noble.20260615.175319

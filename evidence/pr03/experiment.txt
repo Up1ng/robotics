@@ -1,0 +1,8 @@
+{
+  "no_pose_zero_count": 20,
+  "broken_displacement": 0.0,
+  "fixed_displacement": 3.3244112877043097,
+  "fixed_command_count": 100,
+  "rate_hz": 9.999796102137426,
+  "stop_delay_s": 0.9375986159993772
+}

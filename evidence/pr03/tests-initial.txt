@@ -1,0 +1,89 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /home/uping/project/nsu/robotics-pr03/src/patrol
+plugins: ament-pep257-0.17.5, ament-lint-0.17.5, launch-testing-3.4.11, ament-copyright-0.17.5, launch-testing-ros-0.26.12, ament-xmllint-0.17.5, ament-flake8-0.17.5, colcon-core-0.21.1
+collected 6 items
+
+src/patrol/test/test_control.py ...                                      [ 50%]
+src/patrol/test/test_copyright.py s                                      [ 66%]
+src/patrol/test/test_flake8.py F                                         [ 83%]
+src/patrol/test/test_pep257.py .                                         [100%]
+
+=================================== FAILURES ===================================
+_________________________________ test_flake8 __________________________________
+
+    @pytest.mark.flake8
+    @pytest.mark.linter
+    def test_flake8():
+        rc, errors = main_with_errors(argv=[])
+>       assert rc == 0, \
+            'Found %d code style errors / warnings:\n' % len(errors) + \
+            '\n'.join(errors)
+E       AssertionError: Found 5 code style errors / warnings:
+E         ./scripts/pr03_demo.py:12:1: I100 Import statements are in the wrong order. 'from geometry_msgs.msg import Twist' should be before 'import rclpy'
+E         ./scripts/pr03_demo.py:109:35: E128 continuation line under-indented for visual indent
+E         ./src/patrol/patrol/patrol.py:18:1: I100 Import statements are in the wrong order. 'from geometry_msgs.msg import Twist' should be before 'import rclpy'
+E         ./src/patrol/patrol/patrol.py:23:1: I100 Import statements are in the wrong order. 'from patrol.control import command_for_pose' should be before 'from turtlesim.msg import Pose'
+E         ./src/patrol/test/test_control.py:20:1: I100 Import statements are in the wrong order. 'from patrol.control import command_for_pose' should be before 'from turtlesim.msg import Pose'
+E       assert 1 == 0
+
+src/patrol/test/test_flake8.py:23: AssertionError
+----------------------------- Captured stdout call -----------------------------
+
+./scripts/pr03_demo.py:12:1: I100 Import statements are in the wrong order. 'from geometry_msgs.msg import Twist' should be before 'import rclpy'
+from geometry_msgs.msg import Twist
+^
+
+./scripts/pr03_demo.py:109:35: E128 continuation line under-indented for visual indent
+                                  '-r', 'cmd_vel:=/turtle1/cmd_vel'])
+                                  ^
+
+./src/patrol/patrol/patrol.py:18:1: I100 Import statements are in the wrong order. 'from geometry_msgs.msg import Twist' should be before 'import rclpy'
+from geometry_msgs.msg import Twist
+^
+
+./src/patrol/patrol/patrol.py:23:1: I100 Import statements are in the wrong order. 'from patrol.control import command_for_pose' should be before 'from turtlesim.msg import Pose'
+from patrol.control import command_for_pose
+^
+
+./src/patrol/test/test_control.py:20:1: I100 Import statements are in the wrong order. 'from patrol.control import command_for_pose' should be before 'from turtlesim.msg import Pose'
+from patrol.control import command_for_pose
+^
+
+1     E128 continuation line under-indented for visual indent
+4     I100 Import statements are in the wrong order. 'from geometry_msgs.msg import Twist' should be before 'import rclpy'
+
+23 files checked
+5 errors
+
+'E'-type errors: 1
+'I'-type errors: 4
+
+Checked files:
+
+* ./build/turtle_bringup/setup.py
+* ./build/turtle_bringup/launch/sim.launch.py
+* ./build/turtle_bringup/prefix_override/sitecustomize.py
+* ./build/patrol/setup.py
+* ./build/patrol/prefix_override/sitecustomize.py
+* ./scripts/pr03_demo.py
+* ./install/_local_setup_util_sh.py
+* ./install/_local_setup_util_ps1.py
+* ./install/turtle_bringup/share/turtle_bringup/launch/sim.launch.py
+* ./src/turtle_bringup/setup.py
+* ./src/turtle_bringup/turtle_bringup/__init__.py
+* ./src/turtle_bringup/test/test_flake8.py
+* ./src/turtle_bringup/test/test_pep257.py
+* ./src/turtle_bringup/test/test_copyright.py
+* ./src/turtle_bringup/launch/sim.launch.py
+* ./src/patrol/setup.py
+* ./src/patrol/test/test_flake8.py
+* ./src/patrol/test/test_pep257.py
+* ./src/patrol/test/test_control.py
+* ./src/patrol/test/test_copyright.py
+* ./src/patrol/patrol/patrol.py
+* ./src/patrol/patrol/__init__.py
+* ./src/patrol/patrol/control.py
+=========================== short test summary info ============================
+FAILED src/patrol/test/test_flake8.py::test_flake8 - AssertionError: Found 5 ...
+==================== 1 failed, 4 passed, 1 skipped in 1.01s ====================

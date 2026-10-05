@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR03",
+  "commit": "48e6b949bac6d21ea82659e29856e970eabf9aec",
+  "course_kit": {
+    "version": "v1-w05",
+    "archive_sha256": "bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197"
+  },
+  "commands": [
+    "ros2 pkg create --build-type ament_python --node-name patrol patrol --dependencies rclpy geometry_msgs turtlesim",
+    "source /opt/ros/jazzy/setup.bash",
+    "colcon build --symlink-install",
+    "source install/setup.bash",
+    "python3 -m pytest src/patrol/test",
+    "colcon test --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "python3 scripts/pr03_demo.py",
+    "ros2 run patrol patrol",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 topic type /turtle1/pose",
+    "ros2 node info /patrol",
+    "ros2 topic info /cmd_vel --verbose",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
+    "ros2 topic hz /turtle1/cmd_vel --window 100",
+    "python3 .course-kit/v1/tools/check_practice.py PR03 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "patrol pytest: 6 passed",
+      "status": "passed"
+    },
+    {
+      "name": "colcon: 0 errors, 0 failures",
+      "status": "passed"
+    },
+    {
+      "name": "no pose: all commands zero",
+      "status": "passed"
+    },
+    {
+      "name": "wrong topic: zero movement over 10 seconds",
+      "status": "passed"
+    },
+    {
+      "name": "remap: movement and 100 commands over 10 seconds",
+      "status": "passed"
+    },
+    {
+      "name": "rate: 9.999796 Hz",
+      "status": "passed"
+    },
+    {
+      "name": "SIGINT: turtlesim stopped after 0.937599 seconds",
+      "status": "passed"
+    },
+    {
+      "name": "turtle_bringup generated copyright test (unchanged from PR02)",
+      "status": "skipped"
+    }
+  ],
+  "defect": {
+    "reproducer": "ros2 run patrol patrol: /cmd_vel получает команды, /turtle1/cmd_vel не получает; смещение за 10 с равно 0. Поза поступает. См. measurements.json и topic-info-broken.txt.",
+    "root_cause": "Относительное cmd_vel в корневом namespace разрешилось в /cmd_vel, а turtlesim подписан на /turtle1/cmd_vel. Тип, QoS и домен совпадают. Probe на /cmd_vel — измеритель, не получатель управления turtlesim.",
+    "proof_after": "Тот же исходник запущен с -r cmd_vel:=/turtle1/cmd_vel: 100 команд за 10 с, 9.999796 Гц, смещение 3.324411. SIGINT затем прекращает публикацию, остановка симулятора подтверждена через 0.937599 с."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0.173
+  },
+  "ai_used": true
+}
