@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR05",
+  "commit": "d356ba2710d1cfd5ad0fcb1d225ea16955f4450b",
+  "course_kit": {
+    "version": "v1-w06",
+    "archive_sha256": "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe"
+  },
+  "commands": [
+    "source /opt/ros/jazzy/setup.bash",
+    "colcon build --symlink-install",
+    "source install/setup.bash",
+    "python3 -m pytest src/patrol/test src/course_bringup/test",
+    "colcon test --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "python3 scripts/pr05_demo.py",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=reliable record:=false bag_dir:=evidence/pr05/bag",
+    "timeout 5s ros2 topic echo /robot_a/sensor_pose --qos-reliability reliable --once",
+    "ros2 launch course_bringup patrol.launch.py namespace:=robot_a subscriber_reliability:=best_effort record:=true bag_dir:=evidence/pr05/bag",
+    "timeout 5s ros2 topic echo /robot_a/sensor_pose --qos-reliability best_effort --once",
+    "ros2 bag info evidence/pr05/bag",
+    "ros2 bag play evidence/pr05/bag --loop --qos-profile-overrides-path config/qos-overrides.yaml",
+    "python3 .course-kit/v1/tools/check_practice.py PR05 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "pytest: 32 passed, including installed launch smoke test",
+      "status": "passed"
+    },
+    {
+      "name": "colcon: 35 tests, 0 errors, 0 failures",
+      "status": "passed"
+    },
+    {
+      "name": "inherited turtle_bringup copyright test",
+      "status": "skipped"
+    },
+    {
+      "name": "record=false: no recorder; namespaced nodes and command remap",
+      "status": "passed"
+    },
+    {
+      "name": "live reliable timeout 124; best_effort pose delivery 0",
+      "status": "passed"
+    },
+    {
+      "name": "one MCAP topic with 990 messages; metadata matches bag",
+      "status": "passed"
+    },
+    {
+      "name": "same MCAP and override: reliable zero delivery, best_effort receives messages",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "Reliable subscriber against best_effort sensor: topic visible, received=0, echo timeout 124. See qos-before.txt and launch-before.txt.",
+    "root_cause": "A best_effort publisher cannot satisfy a reliable subscription. Topic name/type/domain match; RELIABILITY is the incompatible policy.",
+    "proof_after": "Switch subscriber_reliability to best_effort; live echo returns Pose and exit 0. Record one MCAP (990 messages); stop all live nodes and replay this same bag with best_effort override. Reliable still times out, best_effort receives; see qos-after.txt and replay subscriber logs."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true,
+    "replay_verified": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0.25
+  },
+  "ai_used": true
+}

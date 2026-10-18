@@ -1,0 +1,53 @@
+[INFO] [launch]: All log files can be found below /root/.ros/log/2026-10-18-15-36-47-682960-b533df6e7c82-670
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: Starting namespace=robot_a, reliability=best_effort, record=true, bag=evidence/pr05/bag
+[INFO] [turtlesim_node-1]: process started with pid [673]
+[INFO] [patrol-2]: process started with pid [674]
+[INFO] [pose_relay-3]: process started with pid [675]
+[INFO] [pose_subscriber-4]: process started with pid [676]
+[INFO] [ros2-5]: process started with pid [679]
+[turtlesim_node-1] QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
+[turtlesim_node-1] [INFO] [1792337807.714439845] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1792337807.717749215] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[pose_subscriber-4] [INFO] [1792337807.816005379] [robot_a.pose_subscriber]: Subscriber reliability=best_effort
+[ros2-5] stdin is not a terminal device. Keyboard handling disabled.[INFO] [1792337807.818882370] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[ros2-5] [INFO] [1792337807.818891168] [rosbag2_recorder]: Event publisher thread: Started
+[ros2-5] [INFO] [1792337807.821497699] [rosbag2_recorder]: Starting recording to 'evidence/pr05/bag'
+[ros2-5] [INFO] [1792337807.822407991] [rosbag2_recorder]: Listening for topics...
+[ros2-5] [INFO] [1792337807.822483884] [rosbag2_recorder]: Recording...
+[ros2-5] [INFO] [1792337807.822426631] [rosbag2_recorder]: Topics discovery started.
+[ros2-5] [INFO] [1792337808.084414626] [rosbag2_recorder]: Subscribed to topic '/robot_a/sensor_pose'
+[ros2-5] [INFO] [1792337808.084470835] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[ros2-5] [INFO] [1792337808.084478507] [rosbag2_recorder]: Topics discovery stopped.
+[pose_subscriber-4] [INFO] [1792337808.812502799] [robot_a.pose_subscriber]: received=36
+[pose_subscriber-4] [INFO] [1792337809.813847370] [robot_a.pose_subscriber]: received=98
+[pose_subscriber-4] [INFO] [1792337810.812088999] [robot_a.pose_subscriber]: received=161
+[pose_subscriber-4] [INFO] [1792337811.813716041] [robot_a.pose_subscriber]: received=223
+[pose_subscriber-4] [INFO] [1792337812.810131509] [robot_a.pose_subscriber]: received=284
+[pose_subscriber-4] [INFO] [1792337813.814930639] [robot_a.pose_subscriber]: received=346
+[pose_subscriber-4] [INFO] [1792337814.810600120] [robot_a.pose_subscriber]: received=409
+[pose_subscriber-4] [INFO] [1792337815.811060510] [robot_a.pose_subscriber]: received=471
+[pose_subscriber-4] [INFO] [1792337816.815713018] [robot_a.pose_subscriber]: received=534
+[pose_subscriber-4] [INFO] [1792337817.811540747] [robot_a.pose_subscriber]: received=596
+[pose_subscriber-4] [INFO] [1792337818.812373289] [robot_a.pose_subscriber]: received=659
+[pose_subscriber-4] [INFO] [1792337819.812810865] [robot_a.pose_subscriber]: received=728
+[pose_subscriber-4] [INFO] [1792337820.815501162] [robot_a.pose_subscriber]: received=780
+[pose_subscriber-4] [INFO] [1792337821.813159049] [robot_a.pose_subscriber]: received=843
+[pose_subscriber-4] [INFO] [1792337822.814605969] [robot_a.pose_subscriber]: received=905
+[pose_subscriber-4] [INFO] [1792337823.811985191] [robot_a.pose_subscriber]: received=968
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [ros2-5]: sending signal 'SIGINT' to process[ros2-5]
+[INFO] [pose_subscriber-4]: sending signal 'SIGINT' to process[pose_subscriber-4]
+[INFO] [pose_relay-3]: sending signal 'SIGINT' to process[pose_relay-3]
+[INFO] [patrol-2]: sending signal 'SIGINT' to process[patrol-2]
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[ros2-5] [INFO] [1792337824.164522846] [rosbag2_recorder]: Pausing recording.
+[ros2-5] [INFO] [1792337824.164597001] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[turtlesim_node-1] [INFO] [1792337824.166790711] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2-5] [INFO] [1792337824.169374036] [rosbag2_recorder]: Recording stopped
+[ros2-5] [INFO] [1792337824.171395432] [rosbag2_recorder]: Event publisher thread: Exited
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 673]
+[INFO] [patrol-2]: process has finished cleanly [pid 674]
+[INFO] [pose_subscriber-4]: process has finished cleanly [pid 676]
+[INFO] [pose_relay-3]: process has finished cleanly [pid 675]
+[INFO] [ros2-5]: process has finished cleanly [pid 679]

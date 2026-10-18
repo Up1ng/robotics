@@ -1,0 +1,2 @@
+PASS: record=false, namespace, incompatible live QoS, fixed live delivery,
+one MCAP stream; reliable timeout and best_effort delivery on the same bag.

@@ -1,0 +1,56 @@
+[INFO] [launch]: All log files can be found below /root/.ros/log/2026-10-18-15-35-26-935123-b533df6e7c82-301
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: Starting namespace=robot_a, reliability=reliable, record=false, bag=evidence/pr05/bag
+[INFO] [turtlesim_node-1]: process started with pid [304]
+[INFO] [patrol-2]: process started with pid [305]
+[INFO] [pose_relay-3]: process started with pid [306]
+[INFO] [pose_subscriber-4]: process started with pid [307]
+[turtlesim_node-1] QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
+[turtlesim_node-1] [INFO] [1792337726.983844730] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1792337726.985627663] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[pose_subscriber-4] [INFO] [1792337727.059862443] [robot_a.pose_subscriber]: Subscriber reliability=reliable
+[pose_relay-3] [WARN] [1792337727.197319343] [robot_a.pose_relay]: New subscription discovered on topic 'sensor_pose', requesting incompatible QoS. No messages will be sent to it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [WARN] [1792337727.327250692] [robot_a.pose_subscriber]: New publisher discovered on topic 'sensor_pose', offering incompatible QoS. No messages will be received from it. Last incompatible policy: RELIABILITY
+[pose_subscriber-4] [INFO] [1792337728.061175768] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1792337729.058738700] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1792337730.061286426] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1792337731.058714354] [robot_a.pose_subscriber]: received=0
+[pose_subscriber-4] [INFO] [1792337732.058724553] [robot_a.pose_subscriber]: received=0
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [pose_subscriber-4]: sending signal 'SIGINT' to process[pose_subscriber-4]
+[INFO] [pose_relay-3]: sending signal 'SIGINT' to process[pose_relay-3]
+[INFO] [patrol-2]: sending signal 'SIGINT' to process[patrol-2]
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[turtlesim_node-1] [INFO] [1792337732.669144425] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[patrol-2] Traceback (most recent call last):
+[patrol-2]   File "/workspace/install/patrol/lib/patrol/patrol", line 33, in <module>
+[turtlesim_node-1] [INFO] [1792337732.675315462] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[patrol-2]     sys.exit(load_entry_point('patrol', 'console_scripts', 'patrol')())
+[patrol-2]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[patrol-2]   File "/workspace/build/patrol/patrol/patrol.py", line 87, in main
+[pose_subscriber-4] Traceback (most recent call last):
+[pose_subscriber-4]   File "/workspace/install/patrol/lib/patrol/pose_subscriber", line 33, in <module>
+[pose_relay-3] Traceback (most recent call last):
+[pose_relay-3]   File "/workspace/install/patrol/lib/patrol/pose_relay", line 33, in <module>
+[patrol-2]     node.destroy_node()
+[patrol-2]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1968, in destroy_node
+[patrol-2]     self.__node.destroy_when_not_in_use()
+[patrol-2] KeyboardInterrupt
+[pose_subscriber-4]     sys.exit(load_entry_point('patrol', 'console_scripts', 'pose_subscriber')())
+[pose_subscriber-4]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[pose_subscriber-4]   File "/workspace/build/patrol/patrol/pose_subscriber.py", line 67, in main
+[pose_relay-3]     sys.exit(load_entry_point('patrol', 'console_scripts', 'pose_relay')())
+[pose_relay-3]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[pose_relay-3]   File "/workspace/build/patrol/patrol/pose_relay.py", line 49, in main
+[pose_relay-3]     node.destroy_node()
+[pose_relay-3]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1968, in destroy_node
+[pose_relay-3]     self.__node.destroy_when_not_in_use()
+[pose_relay-3] KeyboardInterrupt
+[pose_subscriber-4]     node.destroy_node()
+[pose_subscriber-4]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1968, in destroy_node
+[pose_subscriber-4]     self.__node.destroy_when_not_in_use()
+[pose_subscriber-4] KeyboardInterrupt
+[ERROR] [patrol-2]: process has died [pid 305, exit code -2, cmd '/workspace/install/patrol/lib/patrol/patrol --ros-args -r __ns:=/robot_a -r pose:=/turtle1/pose -r cmd_vel:=/turtle1/cmd_vel'].
+[ERROR] [pose_subscriber-4]: process has died [pid 307, exit code -2, cmd '/workspace/install/patrol/lib/patrol/pose_subscriber --ros-args -r __ns:=/robot_a --params-file /tmp/launch_params_mb_ob66v'].
+[ERROR] [pose_relay-3]: process has died [pid 306, exit code -2, cmd '/workspace/install/patrol/lib/patrol/pose_relay --ros-args -r __ns:=/robot_a -r pose:=/turtle1/pose'].
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 304]

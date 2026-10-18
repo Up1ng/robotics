@@ -1,0 +1,8 @@
+[INFO] [1792337843.892568910] [robot_a.pose_subscriber]: Subscriber reliability=best_effort
+[INFO] [1792337844.891385650] [robot_a.pose_subscriber]: received=55
+[INFO] [1792337845.890105630] [robot_a.pose_subscriber]: received=118
+[INFO] [1792337846.889218513] [robot_a.pose_subscriber]: received=181
+[INFO] [1792337847.890621957] [robot_a.pose_subscriber]: received=243
+[INFO] [1792337848.889094907] [robot_a.pose_subscriber]: received=304
+[INFO] [1792337849.891728586] [robot_a.pose_subscriber]: received=372
+[INFO] [1792337850.897317721] [robot_a.pose_subscriber]: received=431

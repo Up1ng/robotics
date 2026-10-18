@@ -1,0 +1,24 @@
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+aarch64
+Python 3.12.3
+ROS_DISTRO=jazzy ROS_DOMAIN_ID=56 QT_QPA_PLATFORM=offscreen
+rmw_fastrtps_cpp
+ros-jazzy-rclpy	7.1.12-1noble.20260911.111116
+ros-jazzy-rosbag2-storage-mcap	0.26.11-1noble.20260911.095159
+ros-jazzy-turtlesim	1.8.4-1noble.20260911.091622
+
+HOST: macOS, Colima VZ, Linux arm64 VM; turtlesim offscreen.
+BASE=ros:jazzy-ros-base@sha256:103b6c417973394659af6804d4917cd489b91e5ed22eb7bef263025a3bed2410
+LOCAL_IMAGE=sha256:4316b9435bf2df77134865b3ad83ff203c328339d34af7a423504c0345dabe9c

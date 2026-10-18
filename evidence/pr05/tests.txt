@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /workspace
+plugins: ament-copyright-0.17.5, launch-testing-ros-0.26.13, launch-testing-3.4.12, ament-pep257-0.17.5, ament-flake8-0.17.5, ament-xmllint-0.17.5, ament-lint-0.17.5, colcon-core-0.21.3
+collected 32 items
+
+src/patrol/test/test_control.py .....                                    [ 15%]
+src/patrol/test/test_copyright.py .                                      [ 18%]
+src/patrol/test/test_flake8.py .                                         [ 21%]
+src/patrol/test/test_node.py ...                                         [ 31%]
+src/patrol/test/test_parameters.py ..................                    [ 87%]
+src/patrol/test/test_pep257.py .                                         [ 90%]
+src/patrol/test/test_qos.py ..                                           [ 96%]
+src/course_bringup/test/test_installed_launch.py .                       [100%]
+
+=============================== warnings summary ===============================
+src/patrol/test/test_flake8.py::test_flake8
+src/patrol/test/test_flake8.py::test_flake8
+src/patrol/test/test_flake8.py::test_flake8
+src/patrol/test/test_flake8.py::test_flake8
+  Warning: This process (pid=1056) is multi-threaded, use of fork() may lead to deadlocks in the child.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 32 passed, 4 warnings in 0.50s ========================
