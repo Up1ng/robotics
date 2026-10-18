@@ -1,0 +1,34 @@
+STREAM 40 messages, Hz= 10.00049671954368
+SET {'publish_hz': 5.0, 'linear_speed': 0.7, 'turn_rate': -0.2} successful= True reason= 
+STREAM 20 messages, Hz= 5.001567483352138
+SET {'publish_hz': 0.0, 'linear_speed': 0.9} successful= False reason= publish_hz must be finite and in [1.0, 30.0]
+STREAM 19 messages, Hz= 4.8616197901548714
+SET {'publish_hz': -1.0, 'linear_speed': 0.9} successful= False reason= publish_hz must be finite and in [1.0, 30.0]
+STREAM 20 messages, Hz= 5.002813808929335
+SET {'publish_hz': nan, 'linear_speed': 0.9} successful= False reason= publish_hz must be finite and in [1.0, 30.0]
+STREAM 20 messages, Hz= 5.000056666431655
+SET {'publish_hz': 10.0} successful= True reason= 
+STREAM 38 messages, Hz= 9.583468189566563
+$ ros2 topic type /turtle1/pose 
+ turtlesim/msg/Pose
+  EXIT= 0
+$ ros2 param set /patrol publish_hz 5.0 
+ Set parameter successful
+  EXIT= 0
+$ ros2 param set /patrol publish_hz 0.0 
+  Setting parameter failed: publish_hz must be finite and in [1.0, 30.0]
+ EXIT= 0
+$ ros2 param get /patrol publish_hz 
+ Double value is: 5.0
+  EXIT= 0
+$ ros2 service call /clear std_srvs/srv/Empty {} 
+ waiting for service to become available...
+requester: making request: std_srvs.srv.Empty_Request()
+
+response:
+std_srvs.srv.Empty_Response()
+
+  EXIT= 0
+$ ros2 action list -t 
+ /turtle1/rotate_absolute [turtlesim/action/RotateAbsolute]
+  EXIT= 0
