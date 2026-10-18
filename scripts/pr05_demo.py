@@ -43,7 +43,7 @@ def stop(p):
 
 def cli(log, args, expected=0):
     if args[:3] in (['ros2', 'node', 'list'], ['ros2', 'topic', 'list'],
-                     ['ros2', 'topic', 'info']):
+                    ['ros2', 'topic', 'info']):
         args = args + ['--no-daemon', '--spin-time', '3']
     r = subprocess.run(args, capture_output=True, text=True, timeout=30)
     log.write('$ ' + ' '.join(args) + '\n' + r.stdout + r.stderr
