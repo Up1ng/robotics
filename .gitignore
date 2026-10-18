@@ -12,3 +12,6 @@ log/
 *.egg-info/
 
 .pytest_cache/
+
+.pytest_cache/
+.DS_Store

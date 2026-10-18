@@ -8,6 +8,9 @@
 В Docker с ROS 2 Jazzy и пакетами turtlesim, pytest, ament:
 
 ```bash
+docker build -t robotics-labs .
+docker run --rm -it -e ROS_DOMAIN_ID=46 \
+  -v "$PWD:/workspace" -w /workspace robotics-labs bash
 source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
 source install/setup.bash
@@ -47,3 +50,8 @@ python3 .course-kit/v1/tools/check_practice.py PR04 --submission .
 
 Задание: https://ros.lms.ci.nsu.ru/practices/pr04 .
 Результаты и команды — `evidence/pr04/parameters.md`.
+
+При запуске checker из Git worktree смонтируйте также общий Git-каталог по
+его исходному абсолютному пути: `git rev-parse --path-format=absolute --git-common-dir`.
+Это позволяет checker проверить SHA реализации и состав последующих изменений.
+В контейнере с root добавьте `git config --global --add safe.directory /workspace`.

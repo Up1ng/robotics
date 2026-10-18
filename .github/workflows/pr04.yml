@@ -16,11 +16,10 @@ jobs:
           tar -xzf .github/ci/course-kit-v1-w06.tar.gz -C .course-kit
       - name: Build and verify in Docker
         run: |
-          docker run --rm -v "$PWD:/workspace" -w /workspace \
-            ros:jazzy-ros-base \
+          docker build -t robotics-labs .
+          docker run --rm -v "$PWD:/workspace" -w /workspace robotics-labs \
             bash -c 'set -e
-              apt-get update -qq
-              apt-get install -y -qq ros-jazzy-turtlesim python3-pytest ros-jazzy-ament-flake8 ros-jazzy-ament-pep257 ros-jazzy-ament-copyright
+              git config --global --add safe.directory /workspace
               source /opt/ros/jazzy/setup.bash
               colcon build --symlink-install
               source install/setup.bash
