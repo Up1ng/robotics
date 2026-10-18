@@ -17,7 +17,7 @@
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy
+from rclpy.qos import LivelinessPolicy, QoSProfile, ReliabilityPolicy
 from turtlesim.msg import Pose
 
 
@@ -27,7 +27,8 @@ def sensor_qos(reliability):
                 'best_effort': ReliabilityPolicy.BEST_EFFORT}
     if reliability not in policies:
         raise ValueError('reliability must be reliable or best_effort')
-    return QoSProfile(depth=10, reliability=policies[reliability])
+    return QoSProfile(depth=10, reliability=policies[reliability],
+                      liveliness=LivelinessPolicy.AUTOMATIC)
 
 
 class PoseSubscriber(Node):

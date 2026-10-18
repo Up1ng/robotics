@@ -30,7 +30,10 @@ def start(label, args):
 
 def stop(p):
     if p.poll() is None:
-        os.killpg(p.pid, signal.SIGINT)
+        if p.args[:2] == ['ros2', 'launch']:
+            p.send_signal(signal.SIGINT)  # launch forwards the signal to its children.
+        else:
+            os.killpg(p.pid, signal.SIGINT)
         try:
             p.wait(timeout=20)
         except subprocess.TimeoutExpired:
@@ -39,6 +42,9 @@ def stop(p):
 
 
 def cli(log, args, expected=0):
+    if args[:3] in (['ros2', 'node', 'list'], ['ros2', 'topic', 'list'],
+                     ['ros2', 'topic', 'info']):
+        args = args + ['--no-daemon', '--spin-time', '3']
     r = subprocess.run(args, capture_output=True, text=True, timeout=30)
     log.write('$ ' + ' '.join(args) + '\n' + r.stdout + r.stderr
               + '\nEXIT=' + str(r.returncode) + '\n')

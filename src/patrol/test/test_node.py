@@ -54,8 +54,11 @@ def test_timer_and_atomic_rejection(node):
 def test_other_validator_rejection(node):
     """A later callback rejection cannot alter active state through side effects."""
     from rcl_interfaces.msg import SetParametersResult
+    node.remove_on_set_parameters_callback(node.validate_update)
     node.add_on_set_parameters_callback(
         lambda parameters: SetParametersResult(successful=False, reason='test veto'))
+    # New callbacks run first: validation succeeds, then the external veto runs.
+    node.add_on_set_parameters_callback(node.validate_update)
     timer = node.timer
     assert not node.set_parameters_atomically([
         Parameter('publish_hz', value=5.0)]).successful

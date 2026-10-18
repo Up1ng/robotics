@@ -48,3 +48,10 @@ def test_configured_command():
     assert result.linear.x == 0.7
     assert result.angular.z == -0.2
     assert command_for_pose(None, 0.7, -0.2) == Twist()
+
+
+def test_integer_settings():
+    """Valid numeric integers must be converted for ROS floating point fields."""
+    result = command_for_pose(Pose(), 1, -1)
+    assert result.linear.x == 1.0
+    assert result.angular.z == -1.0

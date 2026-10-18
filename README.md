@@ -81,3 +81,8 @@ python3 .course-kit/v1/tools/check_practice.py PR05 --submission .
 ```
 
 Задание: https://ros.lms.ci.nsu.ru/practices/pr05 .
+
+При запуске checker из Git worktree смонтируйте также общий Git-каталог по
+его исходному абсолютному пути: `git rev-parse --path-format=absolute --git-common-dir`.
+Это позволяет checker проверить SHA реализации и состав последующих изменений.
+В контейнере с root добавьте `git config --global --add safe.directory /workspace`.

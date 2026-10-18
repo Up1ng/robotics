@@ -8,8 +8,8 @@ import subprocess
 import time
 
 from geometry_msgs.msg import Twist
-import rclpy
 from rcl_interfaces.srv import GetParameters, SetParametersAtomically
+import rclpy
 from rclpy.node import Node
 from rclpy.parameter import Parameter
 

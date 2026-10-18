@@ -17,8 +17,8 @@
 from geometry_msgs.msg import Twist
 from patrol.control import command_for_pose
 from patrol.parameters import DEFAULTS, validate_parameters
-import rclpy
 from rcl_interfaces.msg import ParameterDescriptor, SetParametersResult
+import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from turtlesim.msg import Pose
@@ -36,6 +36,7 @@ class Patrol(Node):
         self.settings = {name: self.get_parameter(name).value for name in DEFAULTS}
         error = validate_parameters(self.settings)
         if error:
+            self.destroy_node()
             raise ValueError(error)
         self.last_pose = None
         self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)

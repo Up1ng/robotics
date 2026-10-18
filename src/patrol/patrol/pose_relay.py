@@ -17,7 +17,7 @@
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy
+from rclpy.qos import LivelinessPolicy, QoSProfile, ReliabilityPolicy
 from turtlesim.msg import Pose
 
 
@@ -27,7 +27,8 @@ class PoseRelay(Node):
     def __init__(self):
         """Create a reliable input and a best-effort output."""
         super().__init__('pose_relay')
-        qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT,
+                         liveliness=LivelinessPolicy.AUTOMATIC)
         self.publisher = self.create_publisher(Pose, 'sensor_pose', qos)
         self.subscription = self.create_subscription(Pose, 'pose', self.on_pose, 10)
 

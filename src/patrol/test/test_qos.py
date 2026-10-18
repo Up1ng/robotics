@@ -22,9 +22,9 @@ from rclpy.qos import qos_check_compatible, QoSCompatibility
 def test_incompatible_then_fixed():
     """A best-effort offer fails reliable requests and accepts best effort."""
     publisher = sensor_qos('best_effort')
-    assert qos_check_compatible(publisher, sensor_qos('reliable')).compatibility == (
+    assert qos_check_compatible(publisher, sensor_qos('reliable'))[0] == (
         QoSCompatibility.ERROR)
-    assert qos_check_compatible(publisher, sensor_qos('best_effort')).compatibility == (
+    assert qos_check_compatible(publisher, sensor_qos('best_effort'))[0] == (
         QoSCompatibility.OK)
 
 

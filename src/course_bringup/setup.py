@@ -15,6 +15,7 @@
 """Install launch and replay configuration into the package share directory."""
 
 from glob import glob
+
 from setuptools import find_packages, setup
 
 setup(
@@ -26,6 +27,7 @@ setup(
         ('share/course_bringup/config', glob('config/*.yaml')),
     ],
     install_requires=['setuptools'], zip_safe=True,
+    extras_require={'test': ['pytest']},
     maintainer='Gleb', maintainer_email='upingnev@gmail.com',
     description='Namespaced patrol and optional MCAP recorder.', license='Apache-2.0',
 )
