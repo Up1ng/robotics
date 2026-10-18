@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /workspace/src/course_description
+plugins: ament-copyright-0.17.5, launch-testing-ros-0.26.13, launch-testing-3.4.12, ament-pep257-0.17.5, ament-flake8-0.17.5, ament-xmllint-0.17.5, ament-lint-0.17.5, colcon-core-0.21.3
+collected 14 items
+
+src/course_description/test/test_copyright.py .                          [  7%]
+src/course_description/test/test_flake8.py .                             [ 14%]
+src/course_description/test/test_model.py ...........                    [ 92%]
+src/course_description/test/test_pep257.py .                             [100%]
+
+============================== 14 passed in 0.52s ==============================

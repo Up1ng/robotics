@@ -1,0 +1,21 @@
+$ python3 -m pytest -q src/course_description/test/test_model.py::test_lidar_parent
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________________________ test_lidar_parent _______________________________
+
+model = <Element 'robot' at 0xfdc50da7f290>
+
+    def test_lidar_parent(model):
+        """The fixed lidar offset is expressed in base_link, never in camera_link."""
+        joint = model.find("joint[@name='lidar_joint']")
+>       assert joint.find('parent').get('link') == 'base_link'
+E       AssertionError: assert 'camera_link' == 'base_link'
+E         - base_link
+E         + camera_link
+
+src/course_description/test/test_model.py:76: AssertionError
+=========================== short test summary info ============================
+FAILED src/course_description/test/test_model.py::test_lidar_parent - Asserti...
+1 failed in 0.05s
+
+EXIT=1

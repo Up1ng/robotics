@@ -1,0 +1,126 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /workspace/src/course_description
+plugins: ament-copyright-0.17.5, launch-testing-ros-0.26.13, launch-testing-3.4.12, ament-pep257-0.17.5, ament-flake8-0.17.5, ament-xmllint-0.17.5, ament-lint-0.17.5, colcon-core-0.21.3
+collected 14 items
+
+src/course_description/test/test_copyright.py .                          [  7%]
+src/course_description/test/test_flake8.py F                             [ 14%]
+src/course_description/test/test_model.py ...........                    [ 92%]
+src/course_description/test/test_pep257.py .                             [100%]
+
+=================================== FAILURES ===================================
+_________________________________ test_flake8 __________________________________
+
+    @pytest.mark.flake8
+    @pytest.mark.linter
+    def test_flake8():
+        rc, errors = main_with_errors(argv=[])
+>       assert rc == 0, \
+            'Found %d code style errors / warnings:\n' % len(errors) + \
+            '\n'.join(errors)
+E       AssertionError: Found 7 code style errors / warnings:
+E         ./scripts/pr06_demo.py:60:35: E128 continuation line under-indented for visual indent
+E         ./scripts/pr06_demo.py:100:28: E128 continuation line under-indented for visual indent
+E         ./scripts/pr06_demo.py:112:27: E128 continuation line under-indented for visual indent
+E         ./scripts/pr06_demo.py:122:33: E128 continuation line under-indented for visual indent
+E         ./scripts/pr06_demo.py:123:33: E128 continuation line under-indented for visual indent
+E         ./scripts/pr06_demo.py:126:34: E128 continuation line under-indented for visual indent
+E         ./scripts/pr06_demo.py:127:34: E128 continuation line under-indented for visual indent
+E       assert 1 == 0
+
+src/course_description/test/test_flake8.py:23: AssertionError
+----------------------------- Captured stdout call -----------------------------
+
+./scripts/pr06_demo.py:60:35: E128 continuation line under-indented for visual indent
+                                  'tf2_echo', 'base_link', 'lidar_link'], expected=124)
+                                  ^
+
+./scripts/pr06_demo.py:100:28: E128 continuation line under-indented for visual indent
+                           'src/course_description/test/test_model.py::test_lidar_parent'],
+                           ^
+
+./scripts/pr06_demo.py:112:27: E128 continuation line under-indented for visual indent
+                          'src/course_description/test/test_model.py::test_lidar_parent'])
+                          ^
+
+./scripts/pr06_demo.py:122:33: E128 continuation line under-indented for visual indent
+                                '--once', '--qos-durability', 'transient_local',
+                                ^
+
+./scripts/pr06_demo.py:123:33: E128 continuation line under-indented for visual indent
+                                '--qos-reliability', 'reliable'])
+                                ^
+
+./scripts/pr06_demo.py:126:34: E128 continuation line under-indented for visual indent
+                                 '--once', '--qos-durability', 'volatile',
+                                 ^
+
+./scripts/pr06_demo.py:127:34: E128 continuation line under-indented for visual indent
+                                 '--qos-reliability', 'reliable'], expected=124)
+                                 ^
+
+7     E128 continuation line under-indented for visual indent
+
+52 files checked
+7 errors
+
+'E'-type errors: 7
+
+Checked files:
+
+* ./install/_local_setup_util_sh.py
+* ./install/_local_setup_util_ps1.py
+* ./install/course_bringup/share/course_bringup/launch/patrol.launch.py
+* ./install/course_description/share/course_description/launch/display.launch.py
+* ./install/turtle_bringup/share/turtle_bringup/launch/sim.launch.py
+* ./scripts/pr03_demo.py
+* ./scripts/pr04_demo.py
+* ./scripts/pr05_demo.py
+* ./scripts/pr04_defect.py
+* ./scripts/pr06_demo.py
+* ./build/course_bringup/setup.py
+* ./build/course_bringup/launch/patrol.launch.py
+* ./build/course_bringup/prefix_override/sitecustomize.py
+* ./build/course_description/setup.py
+* ./build/course_description/launch/display.launch.py
+* ./build/course_description/prefix_override/sitecustomize.py
+* ./build/turtle_bringup/setup.py
+* ./build/turtle_bringup/launch/sim.launch.py
+* ./build/turtle_bringup/prefix_override/sitecustomize.py
+* ./build/patrol/setup.py
+* ./build/patrol/prefix_override/sitecustomize.py
+* ./src/course_bringup/setup.py
+* ./src/course_bringup/course_bringup/__init__.py
+* ./src/course_bringup/test/test_installed_launch.py
+* ./src/course_bringup/launch/patrol.launch.py
+* ./src/course_description/setup.py
+* ./src/course_description/test/test_model.py
+* ./src/course_description/test/test_flake8.py
+* ./src/course_description/test/test_copyright.py
+* ./src/course_description/test/test_pep257.py
+* ./src/course_description/launch/display.launch.py
+* ./src/course_description/course_description/__init__.py
+* ./src/turtle_bringup/setup.py
+* ./src/turtle_bringup/test/test_flake8.py
+* ./src/turtle_bringup/test/test_copyright.py
+* ./src/turtle_bringup/test/test_pep257.py
+* ./src/turtle_bringup/launch/sim.launch.py
+* ./src/turtle_bringup/turtle_bringup/__init__.py
+* ./src/patrol/setup.py
+* ./src/patrol/test/test_flake8.py
+* ./src/patrol/test/test_parameters.py
+* ./src/patrol/test/test_control.py
+* ./src/patrol/test/test_qos.py
+* ./src/patrol/test/test_copyright.py
+* ./src/patrol/test/test_node.py
+* ./src/patrol/test/test_pep257.py
+* ./src/patrol/patrol/pose_relay.py
+* ./src/patrol/patrol/pose_subscriber.py
+* ./src/patrol/patrol/control.py
+* ./src/patrol/patrol/__init__.py
+* ./src/patrol/patrol/patrol.py
+* ./src/patrol/patrol/parameters.py
+=========================== short test summary info ============================
+FAILED src/course_description/test/test_flake8.py::test_flake8 - AssertionErr...
+========================= 1 failed, 13 passed in 0.58s =========================

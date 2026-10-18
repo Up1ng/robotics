@@ -1,0 +1,5 @@
+before base_link -> lidar_link = [0.56, 0.0, 0.76]
+after base_link -> lidar_link = [0.28, 0.0, 0.38]
+PASS: check_urdf accepts both trees; semantic test fails before and passes after.
+PASS: late transient_local receives fixed transforms; volatile times out (124).
+PASS: RViz opened both models; screenshots and view_frames PDF files saved.

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR06",
+  "commit": "6d6c0758055c3fc655e9f0b718560683d6bbdcab",
+  "course_kit": {
+    "version": "v1-w06",
+    "archive_sha256": "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe"
+  },
+  "commands": [
+    "docker build -t robotics-pr06 robotics-pr06",
+    "source /opt/ros/jazzy/setup.bash",
+    "colcon build --symlink-install",
+    "source install/setup.bash",
+    "python3 -m pytest src/course_description/test",
+    "colcon test --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "python3 scripts/pr06_demo.py",
+    "xacro src/course_description/urdf/vehicle.urdf.xacro",
+    "check_urdf evidence/pr06/after.urdf",
+    "ros2 launch course_description display.launch.py",
+    "ros2 run tf2_ros tf2_echo base_link lidar_link",
+    "ros2 run tf2_tools view_frames",
+    "ros2 topic info /tf_static --verbose --no-daemon --spin-time 3",
+    "timeout 4s ros2 topic echo /tf_static --once --qos-reliability reliable --qos-durability transient_local",
+    "timeout 4s ros2 topic echo /tf_static --once --qos-reliability reliable --qos-durability volatile",
+    "python3 .course-kit/v1/tools/check_practice.py PR06 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "course_description: 14 pytest passed",
+      "status": "passed"
+    },
+    {
+      "name": "workspace colcon: 49 tests, 0 errors, 0 failures",
+      "status": "passed"
+    },
+    {
+      "name": "inherited turtle_bringup copyright",
+      "status": "skipped"
+    },
+    {
+      "name": "wrong lidar parent: check_urdf accepts, semantic test fails and live tf is (0.56,0,0.76)",
+      "status": "passed"
+    },
+    {
+      "name": "fixed lidar parent: same test passes and live tf is (0.28,0,0.38)",
+      "status": "passed"
+    },
+    {
+      "name": "RViz renders both models with Global Status Ok; screenshots inspected",
+      "status": "passed"
+    },
+    {
+      "name": "late transient_local gets static frames, volatile receives nothing and times out 124",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "pr06-defect 489f80cef4881af976db23232ec20d8521793d61: set camera_link as lidar_joint parent, retaining offset. check_urdf returns 0 but test_lidar_parent fails (exit 1) and tf2_echo measures (0.56,0,0.76). See defect-test.txt and before-tf.txt.",
+    "root_cause": "The lidar origin is relative to its parent. Reparenting it to camera_link adds the camera transform to an offset intended for base_link; a structurally valid tree has incorrect geometry.",
+    "proof_after": "Restore base_link parent. Same semantic test returns 0, tf2_echo measures (0.28,0,0.38), RViz Global Status Ok. Late transient_local echo gets four fixed transforms; volatile times out with 124 while the publisher keeps running."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0.2
+  },
+  "ai_used": true
+}
