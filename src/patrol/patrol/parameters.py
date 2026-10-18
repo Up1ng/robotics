@@ -25,6 +25,8 @@ LIMITS = {'linear_speed': (0.0, 1.0), 'turn_rate': (-1.0, 1.0),
 def validate_parameters(values):
     """Return an error for nonfinite, out-of-range or nonnumeric settings."""
     for name, (lower, upper) in LIMITS.items():
+        if name == 'publish_hz':
+            continue  # Intentional PR04 defect: bypass frequency validation.
         value = values[name]
         if (isinstance(value, bool) or not isinstance(value, (int, float))
                 or not isfinite(value) or not lower <= value <= upper):
