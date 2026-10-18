@@ -1,0 +1,29 @@
+name: PR04 parameters and evidence
+on:
+  push:
+    branches: [pr04]
+jobs:
+  check-pr04:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify course kit
+        run: |
+          echo "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe  .github/ci/course-kit-v1-w06.tar.gz" | sha256sum -c -
+          mkdir -p .course-kit
+          tar -xzf .github/ci/course-kit-v1-w06.tar.gz -C .course-kit
+      - name: Build and verify in Docker
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            ros:jazzy-ros-base \
+            bash -c 'set -e
+              apt-get update -qq
+              apt-get install -y -qq ros-jazzy-turtlesim python3-pytest ros-jazzy-ament-flake8 ros-jazzy-ament-pep257 ros-jazzy-ament-copyright
+              source /opt/ros/jazzy/setup.bash
+              colcon build --symlink-install
+              source install/setup.bash
+              colcon test --event-handlers console_direct+
+              colcon test-result --verbose
+              python3 .course-kit/v1/tools/check_practice.py PR04 --submission .'

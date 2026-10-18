@@ -40,3 +40,11 @@ def test_commands_do_not_share_state():
     command.linear.x = 9.0
     assert command_for_pose(Pose()).linear.x == 0.5
     assert command_for_pose(None) == Twist()
+
+
+def test_configured_command():
+    """Use current speed and turn values while retaining the no-pose guard."""
+    result = command_for_pose(Pose(), 0.7, -0.2)
+    assert result.linear.x == 0.7
+    assert result.angular.z == -0.2
+    assert command_for_pose(None, 0.7, -0.2) == Twist()

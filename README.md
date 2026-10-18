@@ -1,28 +1,11 @@
-# ПР03 — первая нода: поза и команда
+# ПР04 — параметры движения
 
-Продолжение ПР02: пакет `turtle_bringup` сохранён; новый пакет `patrol`
-использует ROS 2 Jazzy, `rclpy`, `geometry_msgs` и `turtlesim/msg/Pose`.
-Подписка хранит последнюю позу, таймер каждые 0,1 с публикует Twist.
-До первой позы команда нулевая, после — `linear.x=0.5`, `angular.z=0.3`.
-Чистая функция `command_for_pose` проверяется без запуска ROS-графа.
+Продолжение ПР03: `patrol` хранит последнюю позу и публикует Twist по таймеру.
+`linear_speed=0.5` (0–1 м/с), `turn_rate=0.3` (−1–1 рад/с),
+`publish_hz=10.0` (1–30 Гц). Принимаются только конечные числа.
+До первой позы команда нулевая. Имена `pose` и `cmd_vel` относительные.
 
-## Docker
-
-Проверенный образ:
-`osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8`.
-Запускать из корня репозитория, с работающим X11-дисплеем:
-
-```bash
-xhost +si:localuser:root
-sudo docker run --rm -it --name robotics-pr03 \
-  --network host --ipc host \
-  -e DISPLAY="$DISPLAY" -e ROS_DOMAIN_ID=36 -e QT_X11_NO_MITSHM=1 \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v "$PWD:/workspace" -w /workspace \
-  osrf/ros:jazzy-desktop-full@sha256:ae7ad3ac243da1dfd8bd402a2fa08e149ffbf7a385013bd8ef798d0800accdc8 bash
-```
-
-В контейнере:
+В Docker с ROS 2 Jazzy и пакетами turtlesim, pytest, ament:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -33,65 +16,34 @@ colcon test --event-handlers console_direct+
 colcon test-result --verbose
 ```
 
-В каждой дополнительной оболочке подключить оба `setup.bash`; домен должен
-совпадать. Для дополнительного терминала: `sudo docker exec -it robotics-pr03 bash`.
-
-Терминал 1:
+В отдельных терминалах с тем же окружением и ROS_DOMAIN_ID:
 
 ```bash
-ros2 launch turtle_bringup sim.launch.py
+ros2 run turtlesim turtlesim_node
+ros2 run patrol patrol --ros-args -r pose:=/turtle1/pose -r cmd_vel:=/turtle1/cmd_vel
+ros2 param set /patrol publish_hz 5.0
+ros2 param set /patrol publish_hz 0.0
+ros2 param get /patrol publish_hz
 ```
 
-Терминал 2 — дефект:
+Последний set отклоняется, get возвращает 5.0. `on_set` только проверяет
+кандидат; `post_set` применяет принятый пакет. Поэтому отклонение всего
+пакета параметров не меняет скорость, частоту или таймер. При смене частоты
+старый таймер отменяется и удаляется. SingleThreadedExecutor исключает
+одновременное выполнение callback двух таймеров во время замены.
 
-```bash
-ros2 run patrol patrol
-```
+Полный живой опыт: `python3 scripts/pr04_demo.py`. Для среды без экрана
+можно задать `QT_QPA_PLATFORM=offscreen`: turtlesim и ROS-граф остаются реальными,
+проверяется поток команд; видимое окно этим способом не проверяется.
 
-Поза поступает, но относительное `cmd_vel` становится `/cmd_vel`, а turtlesim
-подписан на `/turtle1/cmd_vel`. Остановить patrol через Ctrl+C, затем исправить:
-
-```bash
-ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel
-```
-
-Терминал 3:
-
-```bash
-ros2 node info /patrol
-ros2 topic type /turtle1/pose
-ros2 topic info /turtle1/cmd_vel --verbose
-ros2 topic hz /turtle1/cmd_vel --window 100
-```
-
-Измерять 10 секунд. После Ctrl+C у patrol дождаться нулевых скоростей
-в `/turtle1/pose`: turtlesim останавливает черепаху по своему таймауту команд.
-Затем остановить launch. После завершения Docker отозвать X11-доступ:
-`xhost -si:localuser:root`.
-
-## Воспроизведение опыта и проверка сдачи
-
-`python3 scripts/pr03_demo.py` внутри контейнера с подключённым окружением
-сам запускает и останавливает свои процессы. Перед повтором остановить другие
-экземпляры turtlesim/patrol в домене 36. Скрипт проверяет нулевые команды без
-позы, 10 секунд дефекта, 10 секунд после remap, частоту и остановку;
-перезаписывает соответствующие логи в `evidence/pr03/`.
-
-Зафиксированный course-kit: `v1-w05`, SHA-256
-`bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197`.
+Course kit v1-w06 закреплён в `.github/ci/course-kit-v1-w06.tar.gz`, SHA-256:
+`6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe`.
 
 ```bash
 mkdir -p .course-kit
-curl -fsSLo /tmp/pr03-kit.tar.gz \
-  https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w05-bca214e3de6f.tar.gz
-printf '%s  %s\n' \
-  bca214e3de6f90f9513049dfa0f36fee65ad834da502dc3f3f8fb443517b5197 \
-  /tmp/pr03-kit.tar.gz | sha256sum -c -
-tar -xzf /tmp/pr03-kit.tar.gz -C .course-kit
-python3 .course-kit/v1/tools/check_practice.py PR03 --submission .
+tar -xzf .github/ci/course-kit-v1-w06.tar.gz -C .course-kit
+python3 .course-kit/v1/tools/check_practice.py PR04 --submission .
 ```
 
-Результаты и объяснения — в `evidence/pr03/demo.md`; CI —
-`.github/workflows/pr03.yml`. Отчёт ссылается на коммит реализации,
-а сдаётся последующий коммит с evidence. Необязательный маршрут мышью не входит
-в эту работу.
+Задание: https://ros.lms.ci.nsu.ru/practices/pr04 .
+Результаты и команды — `evidence/pr04/parameters.md`.

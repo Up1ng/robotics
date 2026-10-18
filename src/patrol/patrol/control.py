@@ -17,10 +17,10 @@
 from geometry_msgs.msg import Twist
 
 
-def command_for_pose(pose):
-    """Return zero before the first pose, otherwise a fixed patrol command."""
+def command_for_pose(pose, linear_speed=0.5, turn_rate=0.3):
+    """Return zero before the first pose, otherwise the requested patrol command."""
     command = Twist()
     if pose is not None:
-        command.linear.x = 0.5
-        command.angular.z = 0.3
+        command.linear.x = linear_speed
+        command.angular.z = turn_rate
     return command
