@@ -1,0 +1,1 @@
+PASS: bypassing frequency validation reproduces ZeroDivisionError; patrol exited with 1

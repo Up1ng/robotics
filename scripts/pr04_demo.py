@@ -83,7 +83,8 @@ try:
         assert all(m.linear.x == 0.7 for _, m in samples)
     assert update(publish_hz=10.0)
     results['restored'] = measure(10)
-    for args in (['ros2', 'param', 'set', '/patrol', 'publish_hz', '5.0'],
+    for args in (['ros2', 'topic', 'type', '/turtle1/pose'],
+                 ['ros2', 'param', 'set', '/patrol', 'publish_hz', '5.0'],
                  ['ros2', 'param', 'set', '/patrol', 'publish_hz', '0.0'],
                  ['ros2', 'param', 'get', '/patrol', 'publish_hz'],
                  ['ros2', 'service', 'call', '/clear', 'std_srvs/srv/Empty', '{}'],

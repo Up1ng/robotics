@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR04",
+  "commit": "6764e7768a85c1b02da27262887394e8b7befafe",
+  "course_kit": {
+    "version": "v1-w06",
+    "archive_sha256": "6eda53e1c566f7f0a7e09d7afe1e5a6f3b98397175a7e57dede9a84c6d14d0fe"
+  },
+  "commands": [
+    "docker build -t robotics-labs robotics-pr04",
+    "source /opt/ros/jazzy/setup.bash",
+    "colcon build --symlink-install",
+    "source install/setup.bash",
+    "python3 -m pytest src/patrol/test",
+    "colcon test --event-handlers console_direct+",
+    "colcon test-result --verbose",
+    "python3 scripts/pr04_defect.py",
+    "python3 scripts/pr04_demo.py",
+    "ros2 param set /patrol publish_hz 5.0",
+    "ros2 param set /patrol publish_hz 0.0",
+    "ros2 param get /patrol publish_hz",
+    "ros2 service call /clear std_srvs/srv/Empty {}",
+    "ros2 action list -t",
+    "python3 .course-kit/v1/tools/check_practice.py PR04 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "patrol pytest: 29 passed",
+      "status": "passed"
+    },
+    {
+      "name": "colcon: 32 tests, 0 errors, 0 failures",
+      "status": "passed"
+    },
+    {
+      "name": "inherited turtle_bringup copyright test",
+      "status": "skipped"
+    },
+    {
+      "name": "disabled validator: ZeroDivisionError and process exit 1",
+      "status": "passed"
+    },
+    {
+      "name": "live 10 to 5 Hz, reject zero/negative/NaN atomically and retain stream",
+      "status": "passed"
+    },
+    {
+      "name": "clear service call and rotate_absolute action discovery",
+      "status": "passed"
+    }
+  ],
+  "defect": {
+    "reproducer": "pr04-defect f2907f4: disable only publish_hz validation; ros2 param set /patrol publish_hz 0.0 crashes patrol (ZeroDivisionError, exit 1). See defect.txt.",
+    "root_cause": "Timer period calculation 1/publish_hz runs without rejecting zero.",
+    "proof_after": "Same CLI command is rejected with reason publish_hz must be finite and in [1.0, 30.0]; get returns 5.0. Atomic service tests preserve speed 0.7 and ~5 Hz after zero, negative and NaN. Valid change measured 10.000497 -> 5.001567 Hz."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0.2
+  },
+  "ai_used": true
+}
