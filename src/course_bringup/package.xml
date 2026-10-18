@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>course_bringup</name><version>0.0.0</version>
+  <description>Namespaced patrol, sensor QoS and optional MCAP recording.</description>
+  <maintainer email="upingnev@gmail.com">Gleb</maintainer><license>Apache-2.0</license>
+  <exec_depend>launch</exec_depend><exec_depend>launch_ros</exec_depend>
+  <exec_depend>patrol</exec_depend><exec_depend>turtlesim</exec_depend>
+  <exec_depend>rosbag2_transport</exec_depend><exec_depend>rosbag2_storage_mcap</exec_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>
