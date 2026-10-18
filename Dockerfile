@@ -6,3 +6,8 @@ RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y --no
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /workspace
 ENV QT_QPA_PLATFORM=offscreen
+RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ros-jazzy-robot-state-publisher ros-jazzy-xacro ros-jazzy-tf2-tools \
+    ros-jazzy-rviz2 liburdfdom-tools graphviz xvfb x11-utils imagemagick \
+    && rm -rf /var/lib/apt/lists/*
+ENV QT_QPA_PLATFORM=xcb LIBGL_ALWAYS_SOFTWARE=1 DISPLAY=:99

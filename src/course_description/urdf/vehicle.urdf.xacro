@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!-- SI; x forward, y left, z up. Dimensions from course-kit v1-w06 model.sdf. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="course_ackermann">
+  <xacro:arg name="wheelbase" default="0.8"/>
+  <xacro:arg name="track" default="0.62"/>
+  <xacro:arg name="wheel_radius" default="0.12"/>
+  <xacro:property name="wheelbase" value="$(arg wheelbase)"/>
+  <xacro:property name="track" value="$(arg track)"/>
+  <xacro:property name="radius" value="$(arg wheel_radius)"/>
+  <xacro:property name="wheel_width" value="0.07"/>
+  <xacro:property name="body_length" value="1.05"/>
+  <xacro:property name="body_width" value="0.52"/>
+  <xacro:property name="body_height" value="0.22"/>
+
+  <material name="body_blue"><color rgba="0.05 0.36 0.72 1"/></material>
+  <material name="rubber"><color rgba="0.06 0.06 0.07 1"/></material>
+  <material name="camera_green"><color rgba="0.1 0.8 0.25 1"/></material>
+  <material name="lidar_orange"><color rgba="1.0 0.4 0.05 1"/></material>
+  <material name="imu_red"><color rgba="0.9 0.1 0.15 1"/></material>
+
+  <xacro:macro name="box_inertia" params="mass x y z xyz:='0 0 0'">
+    <inertial>
+      <origin xyz="${xyz}"/><mass value="${mass}"/>
+      <inertia ixx="${mass*(y*y+z*z)/12}" ixy="0" ixz="0"
+               iyy="${mass*(x*x+z*z)/12}" iyz="0" izz="${mass*(x*x+y*y)/12}"/>
+    </inertial>
+  </xacro:macro>
+
+  <link name="base_link">
+    <visual><origin xyz="0 0 0.12"/><geometry>
+      <box size="${body_length} ${body_width} ${body_height}"/>
+    </geometry><material name="body_blue"/></visual>
+    <collision><origin xyz="0 0 0.12"/><geometry>
+      <box size="${body_length} ${body_width} ${body_height}"/>
+    </geometry></collision>
+    <xacro:box_inertia mass="12.0" x="${body_length}" y="${body_width}"
+                       z="${body_height}" xyz="0 0 0.12"/>
+  </link>
+
+  <xacro:macro name="wheel" params="name parent xyz">
+    <link name="${name}_wheel">
+      <!-- Cylinder's local Z axis is rotated onto the axle; joint axis is Y. -->
+      <visual><origin rpy="${pi/2} 0 0"/><geometry>
+        <cylinder radius="${radius}" length="${wheel_width}"/>
+      </geometry><material name="rubber"/></visual>
+      <collision><origin rpy="${pi/2} 0 0"/><geometry>
+        <cylinder radius="${radius}" length="${wheel_width}"/>
+      </geometry></collision>
+      <inertial><mass value="0.8"/>
+        <inertia ixx="${0.8*(3*radius*radius+wheel_width*wheel_width)/12}"
+                 ixy="0" ixz="0" iyy="${0.8*radius*radius/2}" iyz="0"
+                 izz="${0.8*(3*radius*radius+wheel_width*wheel_width)/12}"/>
+      </inertial>
+    </link>
+    <joint name="${name}_wheel_joint" type="continuous">
+      <parent link="${parent}"/><child link="${name}_wheel"/>
+      <origin xyz="${xyz}"/><axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="front_corner" params="name side">
+    <link name="${name}_knuckle">
+      <visual><geometry><box size="0.04 0.04 0.06"/></geometry>
+        <material name="rubber"/></visual>
+      <collision><geometry><box size="0.04 0.04 0.06"/></geometry></collision>
+      <xacro:box_inertia mass="0.2" x="0.04" y="0.04" z="0.06"/>
+    </link>
+    <joint name="${name}_steering_joint" type="revolute">
+      <parent link="base_link"/><child link="${name}_knuckle"/>
+      <origin xyz="${wheelbase/2} ${side*track/2} 0"/><axis xyz="0 0 1"/>
+      <limit lower="-0.55" upper="0.55" effort="25" velocity="1.0"/>
+    </joint>
+    <xacro:wheel name="${name}" parent="${name}_knuckle" xyz="0 0 0"/>
+  </xacro:macro>
+  <xacro:front_corner name="front_left" side="1"/>
+  <xacro:front_corner name="front_right" side="-1"/>
+  <xacro:wheel name="rear_left" parent="base_link" xyz="${-wheelbase/2} ${track/2} 0"/>
+  <xacro:wheel name="rear_right" parent="base_link" xyz="${-wheelbase/2} ${-track/2} 0"/>
+
+  <!-- The source SDF deliberately places all three sensor frames at this mount. -->
+  <link name="camera_link">
+    <visual><geometry><box size="0.08 0.04 0.04"/></geometry>
+      <material name="camera_green"/></visual>
+    <collision><geometry><box size="0.08 0.04 0.04"/></geometry></collision>
+    <xacro:box_inertia mass="0.033333333333" x="0.08" y="0.04" z="0.04"/>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/><child link="camera_link"/><origin xyz="0.28 0 0.38"/>
+  </joint>
+  <link name="camera_optical_frame"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/><child link="camera_optical_frame"/>
+    <origin rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
+
+  <link name="lidar_link">
+    <visual><geometry><cylinder radius="0.035" length="0.04"/></geometry>
+      <material name="lidar_orange"/></visual>
+    <collision><geometry><cylinder radius="0.035" length="0.04"/></geometry></collision>
+    <inertial><mass value="0.033333333333"/>
+      <inertia ixx="${0.033333333333*(3*0.035*0.035+0.04*0.04)/12}"
+               ixy="0" ixz="0" iyy="${0.033333333333*(3*0.035*0.035+0.04*0.04)/12}"
+               iyz="0" izz="${0.033333333333*0.035*0.035/2}"/>
+    </inertial>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/><child link="lidar_link"/><origin xyz="0.28 0 0.38"/>
+  </joint>
+
+  <link name="imu_link">
+    <visual><geometry><box size="0.025 0.02 0.01"/></geometry>
+      <material name="imu_red"/></visual>
+    <collision><geometry><box size="0.025 0.02 0.01"/></geometry></collision>
+    <xacro:box_inertia mass="0.033333333334" x="0.025" y="0.02" z="0.01"/>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/><child link="imu_link"/><origin xyz="0.28 0 0.38"/>
+  </joint>
+</robot>
